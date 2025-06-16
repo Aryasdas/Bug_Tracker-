@@ -6,60 +6,13 @@
     <title>About | BugTrack</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .navbar {
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .about-header {
-            background-color: #f8f9fa;
-            padding: 3rem 0;
-        }
-        footer {
-            background-color: #343a40;
-            color: white;
-            margin-top: auto;
-            padding: 2rem 0;
-        }
-        .team-member img {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/style.css">
+    
 </head>
 <body>
-    <!-- Header/Navigation -->
-    <header class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
-                <i class="fas fa-bug me-2"></i>BugTrack
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.php">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="features.php">Features</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a href="login.html" class="btn btn-outline-primary me-2">Login</a>
-                    <a href="register.html" class="btn btn-primary">Sign Up</a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <?php 
+    include '../includes/header.php';
+    ?>
 
     <!-- Main Content -->
     <main class="flex-grow-1">
@@ -115,42 +68,9 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h5><i class="fas fa-bug me-2"></i>BugTrack</h5>
-                    <p>Simple bug tracking for development teams.</p>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <h5>Product</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="features.html" class="text-white text-decoration-none">Features</a></li>
-                        <li><a href="pricing.html" class="text-white text-decoration-none">Pricing</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <h5>Company</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="about.html" class="text-white text-decoration-none">About</a></li>
-                        <li><a href="contact.html" class="text-white text-decoration-none">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h5>Connect</h5>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-            </div>
-            <hr class="my-4 bg-light">
-            <div class="text-center">
-                <p class="mb-0">© 2023 BugTrack. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+   <?php 
+    include '../includes/footer.php';
+    ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
