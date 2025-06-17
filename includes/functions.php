@@ -79,6 +79,22 @@ function logActivity($conn, $user_id, $activity) {
     $stmt->bind_param("is", $user_id, $activity);
     $stmt->execute();
 }
+function getBugsAssignedToDeveloper($conn, $developer_id) {
+    $stmt = $conn->prepare("SELECT * FROM bugs WHERE assigned_to = ?");
+    $stmt->bind_param("i", $developer_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $bugs = [];
+    while ($row = $result->fetch_assoc()) {
+        $bugs[] = $row;
+    }
+
+    $stmt->close();
+    return $bugs;
+}
+
+
 
 
 ?>

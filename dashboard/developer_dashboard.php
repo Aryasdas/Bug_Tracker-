@@ -1,121 +1,123 @@
 <?php
-include '../config/db.php';
-include '../auth/log.php';
-include '../auth/reg.php';
-include '../includes/functions.php';
+session_start();
+require '../config/db.php';
+require '../includes/functions.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'developer') {
-    header("Location: ../login.php");
-    exit();
+    header("Location: ../pages/login.php");
+    exit;
 }
 
 $assignedBugs = getBugsAssignedToUser($conn, $_SESSION['user_id']);
 ?>
-<?php include '../dashboard/common_header.php'; ?>
 
-<main class="px-4 py-3">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Developer Dashboard</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-                <a href="../developer_crud/view_bug.php" class="btn btn-sm btn-outline-secondary">
-                    <i class="fas fa-list me-1"></i> View All My Bugs
-                </a>
-            </div>
-        </div>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <?php include '../dashboard/navbar.php'; ?>
 
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Assigned Bugs</h5>
-                    <p class="card-text display-6"><?php echo count($assignedBugs); ?></p>
+    <main class="container mt-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Developer Dashboard</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <a href="../bugs/create.php" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-plus-circle me-1"></i> New Bug
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-warning mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">In Progress</h5>
-                    <p class="card-text display-6"><?php echo count(array_filter($assignedBugs, fn($bug) => $bug['status'] === 'In Progress')); ?></p>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Assigned Bugs</h5>
+                        <p class="card-text display-6"><?php echo count($assignedBugs); ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">In Progress</h5>
+                        <p class="card-text display-6"><?php echo count(array_filter($assignedBugs, fn($bug) => $bug['status'] === 'In Progress')); ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Resolved</h5>
+                        <p class="card-text display-6"><?php echo count(array_filter($assignedBugs, fn($bug) => $bug['status'] === 'Resolved')); ?></p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Completed</h5>
-                    <p class="card-text display-6"><?php echo count(array_filter($assignedBugs, fn($bug) => $bug['status'] === 'Resolved')); ?></p>
-                </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">My Assigned Bugs</h5>
+            </div>
+            <div class="card-body">
+                <?php if (empty($assignedBugs)): ?>
+                    <div class="alert alert-info">No bugs currently assigned to you.</div>
+                <?php else: ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Severity</th>
+                                    <th>Status</th>
+                                    <th>Reported By</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($assignedBugs as $bug): ?>
+                                <tr>
+                                    <td><?php echo $bug['id']; ?></td>
+                                    <td><?php echo htmlspecialchars($bug['title']); ?></td>
+                                    <td>
+                                        <span class="badge bg-<?php echo severityColor($bug['severity']); ?>">
+                                            <?php echo $bug['severity']; ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-<?php echo statusColor($bug['status']); ?>">
+                                            <?php echo $bug['status']; ?>
+                                        </span>
+                                    </td>
+                                    <td><?php echo $bug['reported_by_name']; ?></td>
+                                    <td>
+                                        <a href="../bugs/view.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                        <a href="../bugs/edit.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-warning">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
-    </div>
+    </main>
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-white">
-            <h5 class="mb-0">Recently Assigned Bugs</h5>
-        </div>
-        <div class="card-body">
-            <?php if (empty($assignedBugs)): ?>
-                <div class="alert alert-info">No bugs currently assigned to you.</div>
-            <?php else: ?>
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Severity</th>
-                            <th>Status</th>
-                            <th>Reported</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach (array_slice($assignedBugs, 0, 5) as $bug): ?>
-                        <tr>
-                            <td><?php echo $bug['id']; ?></td>
-                            <td><?php echo htmlspecialchars($bug['title']); ?></td>
-                            <td>
-                                <span class="badge bg-<?php 
-                                    echo match($bug['severity']) {
-                                        'Critical' => 'danger',
-                                        'High' => 'warning',
-                                        default => 'primary'
-                                    };
-                                ?>">
-                                    <?php echo $bug['severity']; ?>
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge bg-<?php 
-                                    echo match($bug['status']) {
-                                        'Open' => 'info',
-                                        'In Progress' => 'warning',
-                                        'Resolved' => 'success',
-                                        default => 'secondary'
-                                    };
-                                ?>">
-                                    <?php echo $bug['status']; ?>
-                                </span>
-                            </td>
-                            <td><?php echo date('M d, Y', strtotime($bug['created_at'])); ?></td>
-                            <td>
-                                <a href="../developer_crudview_bug.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-info">
-                                    <i class="fas fa-eye"></i> View
-                                </a>
-                                <a href="../developer_crud/update_bug.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit"></i> Update
-                                </a>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <a href="../developer_crudview_bug.php" class="btn btn-sm btn-primary">View All My Bugs</a>
-            <?php endif; ?>
-        </div>
-    </div>
-</main>
-
-<?php include '../dashboard/common_footer.php'; ?>
+    <?php include '../dashboard/footer.php'; ?>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
