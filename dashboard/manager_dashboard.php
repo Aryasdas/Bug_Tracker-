@@ -23,11 +23,11 @@ $users = getAllUsers($conn);
         <h1 class="h2">Manager Dashboard</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
-                <a href="create_bug.php" class="btn btn-sm btn-primary">
+                <a href="../manager_crud/create.php" class="btn btn-sm btn-primary">
                     <i class="fas fa-plus-circle me-1"></i> New Bug
                 </a>
                 <a href="manage_users.php" class="btn btn-sm btn-success">
-                    <i class="fas fa-users-cog me-1"></i> Manage Users
+                    <i class="fas fa-users-cog me-1"></i> View Bugs
                 </a>
             </div>
         </div>
@@ -117,13 +117,13 @@ $users = getAllUsers($conn);
                         <td><?php echo date('M d, Y', strtotime($bug['created_at'])); ?></td>
                         <td><?php echo $bug['assigned_to_name'] ?? 'Unassigned'; ?></td>
                         <td>
-                            <a href="view_bug.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-info" title="View">
+                            <a href="./manager_crud/view.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-info" title="View">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="edit_bug.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-warning" title="Edit">
+                            <a href="../manager_crud/edit.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-warning" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="delete_bug.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-danger" title="Delete" onclick="return confirm('Are you sure?')">
+                            <a href="../manager_crud/delete.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-danger" title="Delete" onclick="return confirm('Are you sure?')">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         </td>

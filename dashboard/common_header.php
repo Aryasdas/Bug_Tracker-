@@ -1,5 +1,12 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+include '../config/db.php';
+include '../config/session.php';
+
+
+if ($_SESSION['role'] !== 'manager') {
+    header("Location: ../auth/login.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,34 +31,31 @@ if (session_status() === PHP_SESSION_NONE) session_start();
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="<?php echo $_SESSION['role'] ?>_dashboard.php">
+                        <a class="nav-link active" href="<?php echo $_SESSION['role'] ?>../dashboard/manager_dashboard.php">
                             <i class="fas fa-tachometer-alt me-1"></i> Dashboard
                         </a>
                     </li>
                     <?php if ($_SESSION['role'] === 'manager' || $_SESSION['role'] === 'tester'): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="create_bug.php">
+                        <a class="nav-link" href="../manager_crud/create.php">
                             <i class="fas fa-plus-circle me-1"></i> Report Bug
                         </a>
                     </li>
                     <?php endif; ?>
                     <?php if ($_SESSION['role'] === 'manager'): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="manage_users.php">
-                            <i class="fas fa-users-cog me-1"></i> Manage Users
-                        </a>
-                    </li>
+                    
                     <?php endif; ?>
                 </ul>
                 <div class="d-flex align-items-center">
                     <div class="dropdown">
                         <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-1"></i> <?php echo $_SESSION['username']; ?>
+                            <i class="fas fa-user-circle me-1"></i> <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'User'; ?>
+
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="profile.php"><i class="fas fa-user me-1"></i> Profile</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="../auth/logout.php"><i class="fas fa-sign-out-alt me-1"></i> Logout</a></li>
+                            <li><a class="dropdown-item text-danger" href="../pages/logout.php"><i class="fas fa-sign-out-alt me-1"></i> Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -64,19 +68,14 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="<?php echo $_SESSION['role'] ?>_dashboard.php">
+                            <a class="nav-link active" href="<?php echo $_SESSION['role'] ?>../dashboard/manager_dashboard.php">
                                 <i class="fas fa-tachometer-alt me-1"></i> Dashboard
                             </a>
                         </li>
                         <?php if ($_SESSION['role'] === 'manager'): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="reports.php">
-                                <i class="fas fa-chart-pie me-1"></i> Reports
-                            </a>
-                        </li>
                         <?php endif; ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="my_bugs.php">
+                            <a class="nav-link" href="../manager_crud/view_bugs.php">
                                 <i class="fas fa-bug me-1"></i> My Bugs
                             </a>
                         </li>

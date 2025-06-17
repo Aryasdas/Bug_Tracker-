@@ -11,9 +11,17 @@ function getAllBugs($conn) {
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 function getAllUsers($conn) {
-    $sql = "SELECT id, username, role FROM users ORDER BY username";
-    $result = $conn->query($sql);
-    return $result->fetch_all(MYSQLI_ASSOC);
+    $users = [];
+    $query = "SELECT id, username FROM users ORDER BY username ASC";
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $users[] = $row;
+        }
+    }
+    
+    return $users;
 }
 
 
@@ -43,6 +51,33 @@ function getBugsReportedByUser($conn, $userId) {
     $stmt->execute();
     $result = $stmt->get_result();
     return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+
+
+function severityColor($severity) {
+    return match ($severity) {
+        'Critical' => 'danger',
+        'High'     => 'warning',
+        'Medium'   => 'primary',
+        'Low'      => 'secondary',
+        default    => 'light'
+    };
+}
+function statusColor($status) {
+    return match ($status) {
+        'Open'        => 'info',
+        'In Progress' => 'warning',
+        'Resolved'    => 'success',
+        'Closed'      => 'secondary',
+        default       => 'light'
+    };
+}
+
+function logActivity($conn, $user_id, $activity) {
+    $stmt = $conn->prepare("INSERT INTO activity_log (user_id, activity, created_at) VALUES (?, ?, NOW())");
+    $stmt->bind_param("is", $user_id, $activity);
+    $stmt->execute();
 }
 
 

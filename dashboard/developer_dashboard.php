@@ -18,7 +18,7 @@ $assignedBugs = getBugsAssignedToUser($conn, $_SESSION['user_id']);
         <h1 class="h2">Developer Dashboard</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
-                <a href="my_bugs.php" class="btn btn-sm btn-outline-secondary">
+                <a href="../developer_crud/view_bug.php" class="btn btn-sm btn-outline-secondary">
                     <i class="fas fa-list me-1"></i> View All My Bugs
                 </a>
             </div>
@@ -101,10 +101,10 @@ $assignedBugs = getBugsAssignedToUser($conn, $_SESSION['user_id']);
                             </td>
                             <td><?php echo date('M d, Y', strtotime($bug['created_at'])); ?></td>
                             <td>
-                                <a href="view_bug.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-info">
+                                <a href="../developer_crudview_bug.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-info">
                                     <i class="fas fa-eye"></i> View
                                 </a>
-                                <a href="update_bug.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-warning">
+                                <a href="../developer_crud/update_bug.php?id=<?php echo $bug['id']; ?>" class="btn btn-sm btn-warning">
                                     <i class="fas fa-edit"></i> Update
                                 </a>
                             </td>
@@ -112,7 +112,7 @@ $assignedBugs = getBugsAssignedToUser($conn, $_SESSION['user_id']);
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <a href="my_bugs.php" class="btn btn-sm btn-primary">View All My Bugs</a>
+                <a href="../developer_crudview_bug.php" class="btn btn-sm btn-primary">View All My Bugs</a>
             <?php endif; ?>
         </div>
     </div>
