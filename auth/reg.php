@@ -1,5 +1,5 @@
 <?php
-session_start();
+include '../config/session.php';
 require_once '../config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
